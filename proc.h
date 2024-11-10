@@ -53,7 +53,7 @@ class TaskSet {
 	  tasks[i].total_burst_time = tasks[i].burst_time;
 	}
 
-	std::sort(tasks.begin(), tasks.end(), TaskSet::compare_gen_time);
+	std::sort(tasks.begin(), tasks.end(), TaskSet::CompareGenTime);
   }
 
   T* At(int index) {
@@ -65,7 +65,7 @@ class TaskSet {
   }
 
  private:
-  static int compare_gen_time(const T& a, const T& b) {
+  static int CompareGenTime(const T& a, const T& b) {
     return a.gen_time < b.gen_time;
   }
 

@@ -29,7 +29,7 @@ void RR(krt::TaskSet<krt::Task>* task_plan) {
     if (running == nullptr) {
       if (q.empty()) {
           // 큐가 비었고 모든 작업도 끝났다면 종료
-          if (task_index >= krt::dummy_task_size) {
+          if (task_index >= krt::dummy_task_size && running == nullptr) {
             std::cout << "All tasks done!...\n";
             break;
         } else continue;  // 큐가 비었지만 남은 작업이 있다면 기다리기
@@ -45,19 +45,16 @@ void RR(krt::TaskSet<krt::Task>* task_plan) {
     if (elapsed_time >= time_quantum) {
       if (q.empty()) {
           // 큐가 비었고 모든 작업도 끝났다면 종료
-          if (task_index >= krt::dummy_task_size) {
+          if (task_index >= krt::dummy_task_size && running == nullptr) {
             std::cout << "All tasks done!...\n";
             break;
         } else continue;  // 큐가 비었지만 남은 작업이 있다면 기다리기
       }
         
       std::cout << "[INFO] Switching from ";
+      std::cout <<  running->id;
 
-      // 이전 작업이 종료된 것이 아니라면 다시 큐에 넣기
-      if (running != nullptr) {
-        std::cout <<  running->id;
-        q.push(running);
-      } else std::cout << "None";
+      q.push(running);
       running = q.front();
       q.pop();
       std::cout << " to " << running->id << '\n';

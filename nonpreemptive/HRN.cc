@@ -16,11 +16,11 @@ int GetMinimumPriorityIndex(const std::vector<krt::Task*>& tasks, const std::vec
   int minimum_index = 0;
   float minimum_priority = 1000000;
   for (int i = 0; i < tasks.size(); ++i) {
-	float current_priority = (wait_time[i] + tasks[i]->burst_time) / static_cast<float>(tasks[i]->burst_time);
-	if (current_priority < minimum_priority) {
-	  minimum_priority = current_priority;
-	  minimum_index = i;
-	}
+  float current_priority = (wait_time[i] + tasks[i]->burst_time) / static_cast<float>(tasks[i]->burst_time);
+  if (current_priority < minimum_priority) {
+    minimum_priority = current_priority;
+    minimum_index = i;
+  }
   }
 
   return minimum_index;
@@ -44,7 +44,7 @@ void HRN(krt::TaskSet<krt::Task>* task_plan) {
     // 작업 생성 시간에 맞게 리스트에 저장
     while (task_index < krt::dummy_task_size && task_plan->At(task_index)->gen_time <= i) {
       tasks.push_back(task_plan->At(task_index++));
-	  wait_time.push_back(0);
+    wait_time.push_back(0);
     }
 
 
@@ -52,22 +52,22 @@ void HRN(krt::TaskSet<krt::Task>* task_plan) {
     if (running == nullptr) {
       if (tasks.empty()) {
         // 리스트가 비었고 모든 작업도 끝났다면 종료
-        if (task_index >= krt::dummy_task_size) {
+        if (task_index >= krt::dummy_task_size && running == nullptr) {
             std::cout << "All tasks done!...\n";
             break;
         } else continue;  // 힙은 비었지만 남은 작업이 있다면 기다리기
-	  }
-	  running_task_index = GetMinimumPriorityIndex(tasks, wait_time);
+    }
+    running_task_index = GetMinimumPriorityIndex(tasks, wait_time);
       running = tasks[running_task_index];
       start = i;
-	}
+  }
 
     running->burst_time--;
-	
-	// 대기 시간 증가
-	for (int i = 0; i < wait_time.size(); ++i) {
-	  if (i != running_task_index) wait_time[i]++;
-	}
+  
+  // 대기 시간 증가
+  for (int i = 0; i < wait_time.size(); ++i) {
+    if (i != running_task_index) wait_time[i]++;
+  }
 
     // 작업 완료
     if (running->burst_time <= 0) {
@@ -79,7 +79,7 @@ void HRN(krt::TaskSet<krt::Task>* task_plan) {
                 << start << ", " << end << "\n  terminated\n-------------" << std::endl;
       running = nullptr;
       tasks.erase(tasks.begin() + running_task_index);
-	  wait_time.erase(wait_time.begin() + running_task_index);
+    wait_time.erase(wait_time.begin() + running_task_index);
     }
   }
 }

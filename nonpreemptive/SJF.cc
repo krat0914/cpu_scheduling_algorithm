@@ -41,7 +41,7 @@ class SJFHeap {
     return top;
   }
 
-  int empty() const { return size == 0; }
+  int Empty() const { return size == 0; }
 
  private:
   inline int GetSmallestChild(int index) { 
@@ -82,9 +82,9 @@ void SJF(krt::TaskSet<krt::Task>* task_plan) {
 
     // 실행 중인 작업이 없다면 새로 할당
     if (running == nullptr) {
-      if (heap.empty()) {
+      if (heap.Empty()) {
         // 힙이 비었고 모든 작업도 끝났다면 종료
-        if (task_index >= krt::dummy_task_size) {
+        if (task_index >= krt::dummy_task_size && running == nullptr) {
             std::cout << "All tasks done!...\n";
             break;
         } else continue;  // 힙은 비었지만 남은 작업이 있다면 기다리기

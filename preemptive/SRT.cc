@@ -42,7 +42,7 @@ class SRTHeap {
     return top;
   }
 
-  int empty() const { return size == 0; }
+  int Empty() const { return size == 0; }
 
  private:
   inline int GetSmallestChild(int index) { 
@@ -78,26 +78,26 @@ void SRT(krt::TaskSet<krt::Task>* task_plan) {
   for (int i = 1; i < 1000000; ++i) {
     // 작업 생성 시간에 맞게 힙에 저장
     while (task_index < krt::dummy_task_size && task_plan->At(task_index)->gen_time <= i) {
-	  // 새로운 작업이 생길 때마다 실행 시간아 가장 적은 작업을 판단한다.
-	  // 이전에 이미 판단된 작업들은 현재 실행 중인 작업보다 실행 시간이 길기에 
-	  // 지금 실행할 작업을 판단하기 위해선 새로운 작업과 실행 중인 작업만 비교하면 된다.
+      // 새로운 작업이 생길 때마다 실행 시간아 가장 적은 작업을 판단한다.
+      // 이전에 이미 판단된 작업들은 현재 실행 중인 작업보다 실행 시간이 길기에 
+      // 지금 실행할 작업을 판단하기 위해선 새로운 작업과 실행 중인 작업만 비교하면 된다.
       
-	  // 실행 중인 작업이 있고 새로운 작업이 실행 시간이 더 적다면 교체
-	  if (running != nullptr && task_plan->At(task_index)->burst_time < running->burst_time) {
+      // 실행 중인 작업이 있고 새로운 작업이 실행 시간이 더 적다면 교체
+      if (running != nullptr && task_plan->At(task_index)->burst_time < running->burst_time) {
         heap.Push(running);
-		std::cout << "[INFO] Switching from " << running->id;
-		running = task_plan->At(task_index++);
-		std::cout << " to " << running->id << '\n';
-	  } else {
+        std::cout << "[INFO] Switching from " << running->id;
+        running = task_plan->At(task_index++);
+        std::cout << " to " << running->id << '\n';
+      } else {
         heap.Push(task_plan->At(task_index++));
-	  }
+      }
     }
 
     // 실행 중인 작업이 없다면 새로 할당
     if (running == nullptr) {
-      if (heap.empty()) {
+      if (heap.Empty()) {
         // 힙이 비었고 모든 작업도 끝났다면 종료
-        if (task_index >= krt::dummy_task_size) {
+        if (task_index >= krt::dummy_task_size && running == nullptr) {
             std::cout << "All tasks done!...\n";
             break;
         } else continue;  // 힙은 비었지만 남은 작업이 있다면 기다리기
