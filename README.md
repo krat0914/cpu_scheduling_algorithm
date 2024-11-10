@@ -28,10 +28,5 @@ cpu 스케줄링 알고리즘 구현
 |---|---|
 | RR (Round Robin) | [RR](./preemptive/RR.cc) |
 | SRT (Shortest Remaining Time First) | [SRT](./preemptive/SRT.cc) |
-<<<<<<< HEAD
-| MLQ (Multilevel Queue) | |
-| MFQ (Multilevel Feedback Queue) | |
-=======
 | MLQ (Multilevel Queue) | [MLQ](./preemptive/MLQ.cc) |
 | MFQ (Multilevel Feedback Queue) | |
->>>>>>> a4c589e (MLQ 구현)
