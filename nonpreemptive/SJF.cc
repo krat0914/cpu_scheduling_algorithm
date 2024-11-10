@@ -70,14 +70,13 @@ void SJF(krt::TaskSet<krt::Task>* task_plan) {
 
   int task_index = 0;
   krt::Task* running = nullptr;       // 실행 중인 작업에 대한 포인터
-  int running_task_burst_time = 0;    // 실행 중인 작업의 남은 실행 시간
 
   int start = 0;
   int end = 0;
 
   for (int i = 1; i < 1000000; ++i) {
     // 작업 생성 시간에 맞게 힙에 저장
-    if (task_index < krt::dummy_task_size && task_plan->At(task_index)->gen_time <= i) {
+    while (task_index < krt::dummy_task_size && task_plan->At(task_index)->gen_time <= i) {
       heap.Push(task_plan->At(task_index++));
     }
 
@@ -93,18 +92,17 @@ void SJF(krt::TaskSet<krt::Task>* task_plan) {
 
       // 새로운 작업 할당
       running = heap.Pop();
-      running_task_burst_time = running->burst_time;
       start = i;
     }
 
-    running_task_burst_time--;
+    running->burst_time--;
 
     // 작업 완료
-    if (running_task_burst_time == 0) {
+    if (running->burst_time <= 0) {
       end = i;
       std::cout << "[INFO]--------\n  pid : " << running->id << "\n  cost : " 
-                << running->burst_time << "\n  left time : "
-                << running_task_burst_time << "\n  gen time : "
+                << running->total_burst_time << "\n  left time : "
+                << running->burst_time << "\n  gen time : "
                 << running->gen_time << "\n  start, end : " 
                 << start << ", " << end << "\n  terminated\n-------------" << std::endl;
       running = nullptr;
