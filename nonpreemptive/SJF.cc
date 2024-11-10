@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 #include "../proc.h"
 
 /**
@@ -101,7 +100,7 @@ void SJF(krt::TaskSet<krt::Task>* task_plan) {
     running_task_burst_time--;
 
     // 작업 완료
-    if (running_task_burst_time == -1) {
+    if (running_task_burst_time == 0) {
       end = i;
       std::cout << "[INFO]--------\n  pid : " << running->id << "\n  cost : " 
                 << running->burst_time << "\n  left time : "
