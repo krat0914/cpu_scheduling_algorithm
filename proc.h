@@ -6,6 +6,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <algorithm>
+#include <type_traits>
 
 namespace krt {
 
@@ -32,6 +33,7 @@ struct Task {
   int burst_time;
 };
 
+template <typename T, typename = std::enable_if<std::is_base_of<Task, T>::value>>
 class TaskSet {
  public:
   TaskSet() {}
@@ -50,17 +52,24 @@ class TaskSet {
 	std::sort(tasks.begin(), tasks.end(), TaskSet::compare_gen_time);
   }
 
-  Task* At(int index) {
+  T* At(int index) {
 	return &tasks[index];
   }
 
+  std::vector<T>& CloneTasks() {
+	return tasks.clone();
+  }
+
  private:
-  static int compare_gen_time(const Task& a, const Task& b) {
+  static int compare_gen_time(const T& a, const T& b) {
     return a.gen_time < b.gen_time;
   }
 
-  std::vector<krt::Task> tasks;
+  std::vector<T> tasks;
 };
+
+const int dummy_task_size = 5;
+
 
 }  // namespace krt
 

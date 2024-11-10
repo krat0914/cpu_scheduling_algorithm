@@ -3,10 +3,18 @@
 
 #include "../proc.h"
 
-void FCFS(krt::TaskSet* tasks) {
+/**
+ * FCFS
+ *
+ * 먼저 들어온 작업들을 순차적으로 처리 (FIFO)
+ */
+
+namespace krt {
+
+void FCFS(krt::TaskSet<krt::Task>* ready_queue) {
   std::queue<krt::Task*> q;
   for (int i = 0; i < 10; ++i) {
-     q.push(tasks->At(i));
+     q.push(ready_queue->At(i));
   }
 
   while (!q.empty()) {
@@ -14,15 +22,17 @@ void FCFS(krt::TaskSet* tasks) {
 	q.pop();
 
 	current->Process();
-	std::cout << "[INFO] process(" << current->id << "), cost : " 
-	          << current->burst_time << "   terminated" << std::endl;
+	std::cout << "[INFO] pid : " << current->id << ", cost : " 
+	          << current->burst_time << "  terminated" << std::endl;
   }
 }
 
-int main() {
-  krt::TaskSet tasks;
-  tasks.GenerateDummyTasks(10);
+}  // namespace krt
 
-  FCFS(&tasks);
+int main() {
+  krt::TaskSet<krt::Task> ready_queue;
+  ready_queue.GenerateDummyTasks(10);
+
+  krt::FCFS(&ready_queue);
   return 0;
 }
