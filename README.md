@@ -35,6 +35,8 @@ cpu 스케줄링 알고리즘 구현
 - `Dispatcher` : 선정된 작업을 CPU에 할당 (`Context Switching`)
 - `Dispatcher Latency` : `Dispatch`를 할 때 소모되는 시간
 
+<br>
+
 ### **선택 기준**
 - `CPU 사용률(CPU Utilization)` : CPU가 안 쉬고 일하는 시간
 - `처리량(Thoughput)` : 단위 시간 내 마치는 작업의 수
