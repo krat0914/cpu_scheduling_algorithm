@@ -32,9 +32,16 @@ class SJFHeap {
     tasks[1] = tasks[size--];
 
     int current = 1;
-    while (LeftChild(current) <= size && tasks[LeftChild(current)]->burst_time < tasks[current]->burst_time) {
-      int new_current = GetSmallestChild(current);
-      SwapTask(current, GetSmallestChild(current));
+    while (LeftChild(current) <= size) {
+      int new_current = LeftChild(current);
+
+      if (RightChild(current) <= size &&
+          tasks[LeftChild(current)]->burst_time > tasks[RightChild(current)]->burst_time) {
+        new_current = RightChild(current);
+      }
+      if (new_current > size || tasks[current]->burst_time < tasks[new_current]->burst_time) break;
+
+      SwapTask(current, new_current);
       current = new_current;
     }
 
@@ -44,14 +51,6 @@ class SJFHeap {
   int Empty() const { return size == 0; }
 
  private:
-  inline int GetSmallestChild(int index) { 
-    int smallest_child = LeftChild(index);
-    if (size >= smallest_child + 1 && 
-      tasks[smallest_child]->burst_time > tasks[smallest_child + 1]->burst_time) {
-      smallest_child++;
-    }
-    return smallest_child;
-  }
   inline void SwapTask(int index1, int index2) {
     krt::Task* temp = tasks[index1];
     tasks[index1] = tasks[index2];
